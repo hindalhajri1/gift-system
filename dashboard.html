@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="assets/style.css">
 </head>
-<script src="assets/app.js"></script>
+
 <body>
 
 <div class="nav">
@@ -17,37 +17,40 @@
 <div class="page">
   <div class="panel">
     <div class="hero">
-      <div class="badge">📊 التقرير</div>
+      <div class="badge">التقرير</div>
       <h1>تقرير سحب الهدايا</h1>
       <p>متابعة المشاركين والهدايا المتبقية.</p>
     </div>
 
-    <div class="gift-grid">
-      <div class="result show">
-        المشاركين
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span>المشاركين</span>
         <strong id="totalResults">0</strong>
       </div>
 
-      <div class="result show">
-        الهدايا المتبقية
+      <div class="stat-card">
+        <span>الهدايا المتبقية</span>
         <strong id="remainingGifts">0</strong>
       </div>
 
-      <div class="result show">
-        أنواع الهدايا
+      <div class="stat-card">
+        <span>أنواع الهدايا</span>
         <strong id="giftTypes">0</strong>
       </div>
     </div>
 
-    <div class="result show" style="text-align:right;">
-      <strong style="font-size:20px;">آخر السحوبات</strong>
+    <div class="section-card">
       <button onclick="resetResults()" style="background:#b42318;margin-bottom:15px;">
         حذف جميع السحوبات
       </button>
-      <div id="resultList" style="margin-top:15px;"></div>
+
+      <h2 class="section-title">آخر السحوبات</h2>
+      <div id="resultList"></div>
     </div>
   </div>
 </div>
+
+<script src="assets/app.js"></script>
 
 <script>
 async function loadDashboard() {
@@ -66,8 +69,10 @@ async function loadDashboard() {
   }
 
   list.innerHTML = results.map(item => `
-    <div style="background:white;border:1px solid #e5eef5;border-radius:14px;padding:14px;margin-bottom:10px;">
+    <div class="list-card">
       <b>${item.employee_name}</b><br>
+      الجوال: ${item.mobile || "-"}<br>
+      الفئة: ${item.gender === "male" ? "رجال" : item.gender === "female" ? "نساء" : "-"}<br>
       الهدية: ${item.gift_name}<br>
       التاريخ: ${item.created_at}
     </div>
