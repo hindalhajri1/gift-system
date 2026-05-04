@@ -16,8 +16,9 @@
 
 <div class="page">
   <div class="panel">
+
     <div class="hero">
-      <div class="badge">⚙️ لوحة الإدارة</div>
+      <div class="badge">لوحة الإدارة</div>
       <h1>إدارة الهدايا</h1>
       <p>أضيفي الهدايا والكميات المتاحة للسحب.</p>
     </div>
@@ -25,26 +26,29 @@
     <div class="form">
       <input type="text" id="giftName" placeholder="اسم الهدية">
       <input type="number" id="giftQty" placeholder="الكمية" min="1">
+
       <select id="giftGender">
         <option value="all">للجميع</option>
         <option value="male">رجال</option>
         <option value="female">نساء</option>
       </select>
+
       <button onclick="addGift()">إضافة الهدية</button>
+
       <button onclick="resetGifts()" class="btn-danger">
         حذف الهدايا
-      </button>    </div>
-
-    <div class="result show" style="text-align:right;">
-      <strong style="font-size:20px;">قائمة الهدايا</strong>
-      <div id="giftList" style="margin-top:15px;"></div>
+      </button>
     </div>
+
+    <div class="section-card">
+      <h2 class="section-title">الهدايا المضافة</h2>
+      <div id="giftList">
+        <p>جاري تحميل الهدايا...</p>
+      </div>
+    </div>
+
   </div>
 </div>
-<div class="section-card">
-    <h2 class="section-title">الهدايا المضافة</h2>
-    <div id="giftList"></div>
-  </div>
 
 <script src="assets/app.js"></script>
 <script>
