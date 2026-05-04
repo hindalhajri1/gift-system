@@ -4,51 +4,43 @@
   <meta charset="UTF-8">
   <title>عيدية تراحم الشرقية</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
 
 <div class="page">
-
   <div class="panel">
-
     <div class="hero">
       <div class="badge">🎉 فعالية الموظفين</div>
       <h1>عيدية تراحم الشرقية</h1>
-      <p>ادخل اسمك وجرّب حظك 🎁</p>
+      <p>ادخل بياناتك وجرّب حظك 🎁</p>
     </div>
 
-    <!-- الفورم -->
     <div class="form" id="form">
       <input type="text" id="name" placeholder="اسم الموظف">
+      <input type="tel" id="mobile" placeholder="رقم الجوال مثال: 05xxxxxxxx">
+
+      <select id="gender">
+        <option value="">اختر الفئة</option>
+        <option value="male">رجال</option>
+        <option value="female">نساء</option>
+      </select>
+
       <button onclick="start()">ابدأ السحب</button>
     </div>
 
-    <!-- كروت الهدايا -->
-    <div class="gift-grid" id="gifts" style="display:none;">
+    <div class="gift-grid one-card" id="gifts" style="display:none;">
       <div class="scratch-card" onclick="draw(this)">
-        <div class="scratch-cover">🎁<span>اكشطي الهدية</span></div>
-      </div>
-    
-      <div class="scratch-card" onclick="draw(this)">
-        <div class="scratch-cover">🎁<span>اكشطي الهدية</span></div>
-      </div>
-    
-      <div class="scratch-card" onclick="draw(this)">
-        <div class="scratch-cover">🎁<span>اكشطي الهدية</span></div>
+        <div class="scratch-cover">🎁<span>اكشط الهدية</span></div>
       </div>
     </div>
 
-    <!-- النتيجة -->
     <div class="result" id="result">
       🎊 مبروك! حصلت على:
       <strong id="giftText"></strong>
     </div>
-
   </div>
-
 </div>
 
 <script src="assets/app.js"></script>

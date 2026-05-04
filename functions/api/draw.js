@@ -1,35 +1,40 @@
 export async function onRequestPost({ request, env }) {
     try {
       const body = await request.json();
-      const employeeName = body.name?.trim();
   
-      if (!employeeName) {
-        return Response.json({ error: "اسم الموظف مطلوب" }, { status: 400 });
+      const employeeName = body.name?.trim();
+      const mobile = body.mobile?.trim();
+      const gender = body.gender?.trim();
+  
+      if (!employeeName || !mobile || !gender) {
+        return Response.json({ error: "الاسم والجوال والفئة مطلوبة" }, { status: 400 });
       }
   
       const existing = await env.DB.prepare(
-        "SELECT id FROM results WHERE employee_name = ?"
-      ).bind(employeeName).first();
+        "SELECT gift_name FROM results WHERE mobile = ?"
+      ).bind(mobile).first();
   
       if (existing) {
-        return Response.json({ error: "تم تسجيلك مسبقًا ولا يمكن السحب مرة أخرى" }, { status: 409 });
+        return Response.json({
+          error: `تم تسجيلك مسبقًا، هديتك هي: ${existing.gift_name}`
+        }, { status: 409 });
       }
   
       const gift = await env.DB.prepare(
-        "SELECT id, name FROM gifts WHERE qty > 0 ORDER BY RANDOM() LIMIT 1"
-      ).first();
+        "SELECT id, name FROM gifts WHERE qty > 0 AND (gender = ? OR gender = 'all') ORDER BY RANDOM() LIMIT 1"
+      ).bind(gender).first();
   
       if (!gift) {
-        return Response.json({ error: "انتهت جميع الهدايا" }, { status: 404 });
+        return Response.json({ error: "لا توجد هدايا متاحة لهذه الفئة" }, { status: 404 });
       }
   
       await env.DB.prepare(
-        "UPDATE gifts SET qty = qty - 1 WHERE id = ?"
+        "UPDATE gifts SET qty = qty - 1 WHERE id = ? AND qty > 0"
       ).bind(gift.id).run();
   
       await env.DB.prepare(
-        "INSERT INTO results (employee_name, gift_id, gift_name) VALUES (?, ?, ?)"
-      ).bind(employeeName, gift.id, gift.name).run();
+        "INSERT INTO results (employee_name, mobile, gender, gift_id, gift_name) VALUES (?, ?, ?, ?, ?)"
+      ).bind(employeeName, mobile, gender, gift.id, gift.name).run();
   
       return Response.json({
         success: true,

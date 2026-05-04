@@ -1,4 +1,6 @@
 let userName = "";
+let userMobile = "";
+let userGender = "";
 
 async function api(url, options = {}) {
   const res = await fetch(url, {
@@ -24,23 +26,52 @@ async function api(url, options = {}) {
   return data;
 }
 
-function start() {
-  const nameInput = document.getElementById("name");
+function normalizeMobile(mobile) {
+  return mobile.replace(/\s/g, "").replace(/^966/, "0");
+}
 
-  if (!nameInput || !nameInput.value.trim()) {
-    alert("اكتبي اسمك أول");
+async function start() {
+  const nameInput = document.getElementById("name");
+  const mobileInput = document.getElementById("mobile");
+  const genderInput = document.getElementById("gender");
+
+  const name = nameInput.value.trim();
+  const mobile = normalizeMobile(mobileInput.value.trim());
+  const gender = genderInput.value;
+
+  if (!name || !mobile || !gender) {
+    alert("اكتبي الاسم ورقم الجوال واختاري الفئة");
     return;
   }
 
-  userName = nameInput.value.trim();
+  if (!/^05\d{8}$/.test(mobile)) {
+    alert("رقم الجوال غير صحيح، مثال: 05xxxxxxxx");
+    return;
+  }
 
-  document.getElementById("form").style.display = "none";
-  document.getElementById("gifts").style.display = "grid";
+  try {
+    const check = await api(`/api/check?mobile=${encodeURIComponent(mobile)}`);
+
+    if (check.exists) {
+      alert(`تم تسجيلك مسبقًا، هديتك هي: ${check.gift}`);
+      return;
+    }
+
+    userName = name;
+    userMobile = mobile;
+    userGender = gender;
+
+    document.getElementById("form").style.display = "none";
+    document.getElementById("gifts").style.display = "grid";
+
+  } catch (error) {
+    alert(error.message);
+  }
 }
 
 async function draw(card) {
-  if (!userName) {
-    alert("اكتبي اسمك أول");
+  if (!userName || !userMobile || !userGender) {
+    alert("أدخلي بياناتك أول");
     return;
   }
 
@@ -49,13 +80,15 @@ async function draw(card) {
       c.classList.add("disabled");
     });
 
-    if (card) {
-      card.classList.add("opened");
-    }
+    if (card) card.classList.add("opened");
 
     const data = await api("/api/draw", {
       method: "POST",
-      body: JSON.stringify({ name: userName })
+      body: JSON.stringify({
+        name: userName,
+        mobile: userMobile,
+        gender: userGender
+      })
     });
 
     setTimeout(() => {
@@ -110,10 +143,28 @@ async function renderGiftAdmin() {
   }
 
   list.innerHTML = gifts.map(gift => `
-    <div style="background:white;border:1px solid #e5eef5;border-radius:14px;padding:14px;margin-bottom:10px;">
+    <div class="list-card">
       <b>${gift.name}</b><br>
       الكمية: ${gift.qty}<br>
       الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
     </div>
   `).join("");
+}
+
+async function resetGifts() {
+  if (!confirm("هل أنتِ متأكدة من حذف جميع الهدايا؟")) return;
+  if (!confirm("تأكيد نهائي: سيتم حذف جميع الهدايا ولا يمكن التراجع.")) return;
+
+  await api("/api/reset-gifts", { method: "POST" });
+  alert("تم حذف جميع الهدايا");
+  renderGiftAdmin();
+}
+
+async function resetResults() {
+  if (!confirm("هل أنتِ متأكدة من حذف جميع السحوبات؟")) return;
+  if (!confirm("تأكيد نهائي: سيتم حذف جميع نتائج السحب ولا يمكن التراجع.")) return;
+
+  await api("/api/reset-results", { method: "POST" });
+  alert("تم حذف جميع السحوبات");
+  location.reload();
 }
