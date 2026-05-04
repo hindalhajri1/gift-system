@@ -109,3 +109,29 @@ function renderGiftAdmin() {
     </div>
   `).join("");
 }
+
+function renderDashboard() {
+    const totalResults = document.getElementById("totalResults");
+    const remainingGifts = document.getElementById("remainingGifts");
+    const giftTypes = document.getElementById("giftTypes");
+    const resultList = document.getElementById("resultList");
+  
+    if (!totalResults) return;
+  
+    totalResults.innerText = results.length;
+    remainingGifts.innerText = gifts.reduce((sum, gift) => sum + Number(gift.qty), 0);
+    giftTypes.innerText = gifts.length;
+  
+    if (results.length === 0) {
+      resultList.innerHTML = "<p>لا توجد سحوبات حتى الآن.</p>";
+      return;
+    }
+  
+    resultList.innerHTML = results.slice().reverse().map((item, index) => `
+      <div style="background:white;border:1px solid #e5eef5;border-radius:14px;padding:14px;margin-bottom:10px;">
+        <b>${item.name}</b><br>
+        الهدية: ${item.gift}<br>
+        التاريخ: ${item.date}
+      </div>
+    `).join("");
+  }
