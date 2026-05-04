@@ -152,19 +152,25 @@ async function renderGiftAdmin() {
 }
 
 async function resetGifts() {
-  if (!confirm("هل أنتِ متأكدة من حذف جميع الهدايا؟")) return;
-  if (!confirm("تأكيد نهائي: سيتم حذف جميع الهدايا ولا يمكن التراجع.")) return;
+    if (!confirm("هل أنتِ متأكدة من حذف جميع الهدايا؟")) return;
+  
+    try {
+      await api("/api/reset-gifts", { method: "POST" });
+      alert("تم حذف جميع الهدايا بنجاح");
+      renderGiftAdmin();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
 
-  await api("/api/reset-gifts", { method: "POST" });
-  alert("تم حذف جميع الهدايا");
-  renderGiftAdmin();
-}
-
-async function resetResults() {
-  if (!confirm("هل أنتِ متأكدة من حذف جميع السحوبات؟")) return;
-  if (!confirm("تأكيد نهائي: سيتم حذف جميع نتائج السحب ولا يمكن التراجع.")) return;
-
-  await api("/api/reset-results", { method: "POST" });
-  alert("تم حذف جميع السحوبات");
-  location.reload();
-}
+  async function resetResults() {
+    if (!confirm("هل أنتِ متأكدة من حذف جميع السحوبات؟")) return;
+  
+    try {
+      await api("/api/reset-results", { method: "POST" });
+      alert("تم حذف جميع السحوبات بنجاح");
+      location.reload();
+    } catch (error) {
+      alert(error.message);
+    }
+  }
