@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>إدارة الهدايا</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+
+<body>
+
+<div class="nav">
+  <a href="index.html">صفحة السحب</a>
+  <a href="dashboard.html">التقرير</a>
+</div>
+
+<div class="page">
+  <div class="panel">
+    <div class="hero">
+      <div class="badge">⚙️ لوحة الإدارة</div>
+      <h1>إدارة الهدايا</h1>
+      <p>أضيفي الهدايا والكميات المتاحة للسحب.</p>
+    </div>
+
+    <div class="form">
+      <input type="text" id="giftName" placeholder="اسم الهدية">
+      <input type="number" id="giftQty" placeholder="الكمية" min="1">
+      <select id="giftGender">
+        <option value="all">للجميع</option>
+        <option value="male">رجال</option>
+        <option value="female">نساء</option>
+      </select>
+      <button onclick="addGift()">إضافة الهدية</button>
+    </div>
+
+    <div class="result show" style="text-align:right;">
+      <strong style="font-size:20px;">قائمة الهدايا</strong>
+      <div id="giftList" style="margin-top:15px;"></div>
+    </div>
+  </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+  renderGiftAdmin();
+</script>
+
+</body>
+</html>
