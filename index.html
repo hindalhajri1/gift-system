@@ -5,65 +5,45 @@
   <title>عيدية تراحم الشرقية</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial;
-      background: linear-gradient(135deg, #003b71, #0195cb);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-
-    .card {
-      background: white;
-      color: #003b71;
-      padding: 30px;
-      border-radius: 20px;
-      width: 300px;
-      text-align: center;
-    }
-
-    input, button {
-      width: 100%;
-      padding: 12px;
-      margin-top: 10px;
-      border-radius: 10px;
-      border: none;
-    }
-
-    button {
-      background: #0195cb;
-      color: white;
-      cursor: pointer;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 
 <body>
 
-<div class="card">
-  <h2>🎁 عيدية تراحم</h2>
-  <p>ادخل اسمك وجرّب حظك</p>
+<div class="page">
 
-  <input type="text" id="name" placeholder="اسم الموظف">
-  <button onclick="start()">ابدأ</button>
+  <div class="panel">
+
+    <div class="hero">
+      <div class="badge">🎉 فعالية الموظفين</div>
+      <h1>عيدية تراحم الشرقية</h1>
+      <p>ادخل اسمك وجرّب حظك 🎁</p>
+    </div>
+
+    <!-- الفورم -->
+    <div class="form" id="form">
+      <input type="text" id="name" placeholder="اسم الموظف">
+      <button onclick="start()">ابدأ السحب</button>
+    </div>
+
+    <!-- كروت الهدايا -->
+    <div class="gift-grid" id="gifts" style="display:none;">
+      <div class="gift-card" onclick="draw()">🎁<span>اختيار</span></div>
+      <div class="gift-card" onclick="draw()">🎁<span>اختيار</span></div>
+      <div class="gift-card" onclick="draw()">🎁<span>اختيار</span></div>
+    </div>
+
+    <!-- النتيجة -->
+    <div class="result" id="result">
+      🎊 مبروك! حصلت على:
+      <strong id="giftText"></strong>
+    </div>
+
+  </div>
+
 </div>
 
-<script>
-function start() {
-  const name = document.getElementById("name").value;
-
-  if (!name) {
-    alert("اكتب اسمك أول");
-    return;
-  }
-
-  alert("جاهز للسحب يا " + name + " 🎉");
-}
-</script>
+<script src="assets/app.js"></script>
 
 </body>
 </html>
