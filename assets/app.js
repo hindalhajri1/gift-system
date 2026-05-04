@@ -1,19 +1,21 @@
 let userName = "";
 
-let gifts = JSON.parse(localStorage.getItem("gifts")) || [
-  { name: "بطاقة 100 ريال", qty: 3, gender: "all" },
-  { name: "قسيمة شرائية", qty: 2, gender: "all" },
-  { name: "كوب قهوة", qty: 5, gender: "all" }
-];
+async function api(url, options = {}) {
+  const res = await fetch(url, {
+    headers: { "Content-Type": "application/json" },
+    ...options
+  });
 
-let results = JSON.parse(localStorage.getItem("results")) || [];
+  const data = await res.json();
 
-function saveData() {
-  localStorage.setItem("gifts", JSON.stringify(gifts));
-  localStorage.setItem("results", JSON.stringify(results));
+  if (!res.ok) {
+    throw new Error(data.error || "حدث خطأ غير متوقع");
+  }
+
+  return data;
 }
 
-function start() {
+async function start() {
   const nameInput = document.getElementById("name");
 
   if (!nameInput.value.trim()) {
@@ -23,42 +25,27 @@ function start() {
 
   userName = nameInput.value.trim();
 
-  const alreadyPlayed = results.some(r => r.name === userName);
-  if (alreadyPlayed) {
-    alert("تم تسجيلك مسبقًا ولا يمكن السحب مرة أخرى");
-    return;
-  }
-
   document.getElementById("form").style.display = "none";
   document.getElementById("gifts").style.display = "grid";
 }
 
-function draw() {
-  const availableGifts = gifts.filter(g => Number(g.qty) > 0);
+async function draw() {
+  try {
+    const data = await api("/api/draw", {
+      method: "POST",
+      body: JSON.stringify({ name: userName })
+    });
 
-  if (availableGifts.length === 0) {
-    alert("انتهت جميع الهدايا");
-    return;
+    document.getElementById("giftText").innerText = data.gift;
+    document.getElementById("result").classList.add("show");
+    document.getElementById("gifts").style.pointerEvents = "none";
+
+  } catch (error) {
+    alert(error.message);
   }
-
-  const selected = availableGifts[Math.floor(Math.random() * availableGifts.length)];
-
-  selected.qty = Number(selected.qty) - 1;
-
-  results.push({
-    name: userName,
-    gift: selected.name,
-    date: new Date().toLocaleString("ar-SA")
-  });
-
-  saveData();
-
-  document.getElementById("giftText").innerText = selected.name;
-  document.getElementById("result").classList.add("show");
-  document.getElementById("gifts").style.pointerEvents = "none";
 }
 
-function addGift() {
+async function addGift() {
   const name = document.getElementById("giftName").value.trim();
   const qty = document.getElementById("giftQty").value;
   const gender = document.getElementById("giftGender").value;
@@ -68,70 +55,38 @@ function addGift() {
     return;
   }
 
-  gifts.push({
-    name,
-    qty: Number(qty),
-    gender
-  });
+  try {
+    await api("/api/gifts", {
+      method: "POST",
+      body: JSON.stringify({ name, qty, gender })
+    });
 
-  saveData();
+    document.getElementById("giftName").value = "";
+    document.getElementById("giftQty").value = "";
 
-  document.getElementById("giftName").value = "";
-  document.getElementById("giftQty").value = "";
+    renderGiftAdmin();
 
-  renderGiftAdmin();
+  } catch (error) {
+    alert(error.message);
+  }
 }
 
-function deleteGift(index) {
-  if (!confirm("هل تريدين حذف الهدية؟")) return;
-
-  gifts.splice(index, 1);
-  saveData();
-  renderGiftAdmin();
-}
-
-function renderGiftAdmin() {
+async function renderGiftAdmin() {
   const list = document.getElementById("giftList");
   if (!list) return;
+
+  const gifts = await api("/api/gifts");
 
   if (gifts.length === 0) {
     list.innerHTML = "<p>لا توجد هدايا مضافة.</p>";
     return;
   }
 
-  list.innerHTML = gifts.map((gift, index) => `
+  list.innerHTML = gifts.map(gift => `
     <div style="background:white;border:1px solid #e5eef5;border-radius:14px;padding:14px;margin-bottom:10px;">
       <b>${gift.name}</b><br>
       الكمية: ${gift.qty}<br>
       الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
-      <br><br>
-      <button onclick="deleteGift(${index})" style="background:#b42318;">حذف</button>
     </div>
   `).join("");
 }
-
-function renderDashboard() {
-    const totalResults = document.getElementById("totalResults");
-    const remainingGifts = document.getElementById("remainingGifts");
-    const giftTypes = document.getElementById("giftTypes");
-    const resultList = document.getElementById("resultList");
-  
-    if (!totalResults) return;
-  
-    totalResults.innerText = results.length;
-    remainingGifts.innerText = gifts.reduce((sum, gift) => sum + Number(gift.qty), 0);
-    giftTypes.innerText = gifts.length;
-  
-    if (results.length === 0) {
-      resultList.innerHTML = "<p>لا توجد سحوبات حتى الآن.</p>";
-      return;
-    }
-  
-    resultList.innerHTML = results.slice().reverse().map((item, index) => `
-      <div style="background:white;border:1px solid #e5eef5;border-radius:14px;padding:14px;margin-bottom:10px;">
-        <b>${item.name}</b><br>
-        الهدية: ${item.gift}<br>
-        التاريخ: ${item.date}
-      </div>
-    `).join("");
-  }
