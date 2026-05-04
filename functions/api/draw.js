@@ -1,4 +1,9 @@
 async function draw(card) {
+    if (!userName) {
+      alert("اكتبي اسمك أول");
+      return;
+    }
+  
     try {
       document.querySelectorAll(".scratch-card").forEach(c => {
         c.classList.add("disabled");
