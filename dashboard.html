@@ -1,55 +1,30 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>تقرير الهدايا</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="assets/style.css">
-</head>
-
-<body>
-
-<div class="nav">
-  <a href="index.html">صفحة السحب</a>
-  <a href="gifts.html">إدارة الهدايا</a>
-</div>
-
-<div class="page">
-  <div class="panel">
-    <div class="hero">
-      <div class="badge">📊 التقرير</div>
-      <h1>تقرير سحب الهدايا</h1>
-      <p>متابعة المشاركين والهدايا المتبقية.</p>
-    </div>
-
-    <div class="gift-grid">
-      <div class="result show">
-        المشاركين
-        <strong id="totalResults">0</strong>
-      </div>
-
-      <div class="result show">
-        الهدايا المتبقية
-        <strong id="remainingGifts">0</strong>
-      </div>
-
-      <div class="result show">
-        أنواع الهدايا
-        <strong id="giftTypes">0</strong>
-      </div>
-    </div>
-
-    <div class="result show" style="text-align:right;">
-      <strong style="font-size:20px;">آخر السحوبات</strong>
-      <div id="resultList" style="margin-top:15px;"></div>
-    </div>
-  </div>
-</div>
-
 <script src="assets/app.js"></script>
-<script>
-  renderDashboard();
-</script>
 
-</body>
-</html>
+<script>
+async function loadDashboard() {
+
+  const stats = await fetch("/api/stats").then(r => r.json());
+  const results = await fetch("/api/results").then(r => r.json());
+
+  document.getElementById("totalResults").innerText = stats.total;
+  document.getElementById("remainingGifts").innerText = stats.remaining;
+  document.getElementById("giftTypes").innerText = stats.types;
+
+  const list = document.getElementById("resultList");
+
+  if (results.length === 0) {
+    list.innerHTML = "<p>لا توجد سحوبات حتى الآن.</p>";
+    return;
+  }
+
+  list.innerHTML = results.map(item => `
+    <div style="background:white;border:1px solid #e5eef5;border-radius:14px;padding:14px;margin-bottom:10px;">
+      <b>${item.employee_name}</b><br>
+      الهدية: ${item.gift_name}<br>
+      التاريخ: ${item.created_at}
+    </div>
+  `).join("");
+}
+
+loadDashboard();
+</script>
