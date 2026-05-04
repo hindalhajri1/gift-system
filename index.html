@@ -30,16 +30,17 @@
       <button onclick="start()">ابدأ السحب</button>
     </div>
 
-    <div class="gift-grid one-card" id="gifts" style="display:none;">
-      <div class="scratch-card" onclick="draw(this)">
-        <div class="scratch-cover">🎁<span>اكشط الهدية</span></div>
+    <div class="scratch-area" id="gifts" style="display:none;">
+      <div class="real-scratch-card">
+        <div class="prize-content">
+          <span>هديتك</span>
+          <strong id="giftText"></strong>
+        </div>
+        <canvas id="scratchCanvas"></canvas>
       </div>
     </div>
 
-    <div class="result" id="result">
-      🎊 مبروك! حصلت على:
-      <strong id="giftText"></strong>
-    </div>
+    <div class="result" id="result"></div>
   </div>
 </div>
 
