@@ -1,9 +1,17 @@
 export async function onRequestGet({ request }) {
-    const email = request.headers.get("cf-access-authenticated-user-email") || "";
+    const email =
+      request.headers.get("cf-access-authenticated-user-email") ||
+      request.headers.get("CF-Access-Authenticated-User-Email") ||
+      "";
   
-    const name = email
-      ? email.split("@")[0].replace(/[._-]/g, " ")
-      : "مستخدم";
+    let name = "مستخدم";
   
-    return Response.json({ name });
+    if (email) {
+      name = email
+        .split("@")[0]
+        .replace(/[._-]/g, " ")
+        .trim();
+    }
+  
+    return Response.json({ name, email });
   }

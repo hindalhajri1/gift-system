@@ -242,14 +242,16 @@ async function resetGifts() {
   }
 
   async function loadUser() {
+    const el = document.getElementById("userName");
+    if (!el) return;
+  
     try {
       const res = await fetch("/api/me");
       const data = await res.json();
   
-      document.getElementById("userName").innerText =
-        "مرحباً " + data.name;
+      el.innerText = "مرحباً " + (data.name || "مستخدم");
     } catch {
-      document.getElementById("userName").innerText = "مرحباً";
+      el.innerText = "مرحباً مستخدم";
     }
   }
   
