@@ -238,7 +238,7 @@ async function resetGifts() {
   }
   
   function logout() {
-    window.location.href = "/cdn-cgi/access/logout";
+    window.location.href = "https://gift.hindtech.sa/cdn-cgi/access/logout";
   }
 
   async function loadUser() {
