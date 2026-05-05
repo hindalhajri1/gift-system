@@ -253,3 +253,21 @@
   .btn-danger:hover {
     background: #d92d20;
   }
+
+  .btn-export {
+    display: inline-block;
+    background: var(--navy);
+    color: white;
+    text-decoration: none;
+    border: 1px solid var(--navy-2);
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    width: auto;
+    margin-inline-start: 8px;
+  }
+  
+  .btn-export:hover {
+    background: var(--navy-2);
+  }
