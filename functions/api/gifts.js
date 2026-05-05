@@ -8,12 +8,13 @@ export async function onRequestGet({ env }) {
   
   export async function onRequestPost({ request, env }) {
     const body = await request.json();
+  
     const name = body.name?.trim();
-    const qty = Number(body.qty || 0);
+    const qty = parseInt(body.qty, 10);
     const gender = body.gender || "all";
   
-    if (!name || qty <= 0) {
-      return Response.json({ error: "بيانات الهدية غير مكتملة" }, { status: 400 });
+    if (!name || !Number.isInteger(qty) || qty <= 0) {
+      return Response.json({ error: "اكتبي اسم الهدية والكمية بشكل صحيح" }, { status: 400 });
     }
   
     await env.DB.prepare(

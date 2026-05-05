@@ -21,16 +21,20 @@ export async function onRequestPost({ request, env }) {
       }
   
       const gift = await env.DB.prepare(
-        "SELECT id, name FROM gifts WHERE qty > 0 AND (gender = ? OR gender = 'all') ORDER BY RANDOM() LIMIT 1"
+        "SELECT id, name, qty FROM gifts WHERE qty > 0 AND (gender = ? OR gender = 'all') ORDER BY RANDOM() LIMIT 1"
       ).bind(gender).first();
   
       if (!gift) {
-        return Response.json({ error: "لا توجد هدايا متاحة لهذه الفئة" }, { status: 404 });
+        return Response.json({ error: "انتهت الهدايا المتاحة لهذه الفئة" }, { status: 404 });
       }
   
-      await env.DB.prepare(
+      const update = await env.DB.prepare(
         "UPDATE gifts SET qty = qty - 1 WHERE id = ? AND qty > 0"
       ).bind(gift.id).run();
+  
+      if (!update.success) {
+        return Response.json({ error: "تعذر تحديث كمية الهدية" }, { status: 500 });
+      }
   
       await env.DB.prepare(
         "INSERT INTO results (employee_name, mobile, gender, gift_id, gift_name) VALUES (?, ?, ?, ?, ?)"
