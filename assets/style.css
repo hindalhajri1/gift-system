@@ -277,15 +277,18 @@
     align-items: center;
     margin-bottom: 20px;
   }
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   
   .btn-logout {
     background: transparent;
-    border: 1px solid var(--border);
-    padding: 8px 14px;
-    border-radius: 8px;
-    cursor: pointer;
+    color: #dc2626;
+    border: 1px solid #fca5a5;
   }
   
   .btn-logout:hover {
-    background: #f4f7fb;
+    background: #fef2f2;
   }
