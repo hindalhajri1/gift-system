@@ -271,3 +271,21 @@
   .btn-export:hover {
     background: var(--navy-2);
   }
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .btn-logout {
+    background: transparent;
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .btn-logout:hover {
+    background: #f4f7fb;
+  }

@@ -223,3 +223,37 @@ async function resetGifts() {
     canvas.addEventListener("touchend", () => isDrawing = false);
     canvas.addEventListener("touchmove", scratch);
   }
+  async function loadUser() {
+    try {
+      const res = await fetch("/api/me");
+      const data = await res.json();
+  
+      if (data.name) {
+        document.getElementById("welcomeText").innerText =
+          "مرحباً، " + data.name;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
+  
+  function logout() {
+    window.location.href = "/cdn-cgi/access/logout";
+  }
+
+  async function loadUser() {
+    const el = document.getElementById("userName");
+    if (!el) return;
+  
+    try {
+      const res = await fetch("/api/me");
+      const data = await res.json();
+      el.innerText = "مرحباً " + (data.name || "مستخدم");
+    } catch {
+      el.innerText = "مرحباً";
+    }
+  }
+  
+  function logout() {
+    window.location.href = "/cdn-cgi/access/logout";
+  }

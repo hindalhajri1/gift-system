@@ -1,6 +1,13 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+ 
+  
+   
 <head>
+    <div class="top-bar">
+        <span id="userName" class="welcome-text">مرحباً</span>
+        <button onclick="logout()" class="btn-logout">تسجيل خروج</button>
+      </div>
   <meta charset="UTF-8">
   <title>تقرير الهدايا</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,6 +90,10 @@ async function loadDashboard() {
 
 loadDashboard();
 </script>
-
+<script src="assets/app.js"></script>
+<script>
+  loadUser();
+  loadDashboard();
+</script>
 </body>
 </html>
