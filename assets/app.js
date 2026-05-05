@@ -107,24 +107,44 @@ async function addGift() {
 }
 
 async function renderGiftAdmin() {
-  const list = document.getElementById("giftList");
-  if (!list) return;
-
-  const gifts = await api("/api/gifts");
-
-  if (gifts.length === 0) {
-    list.innerHTML = "<p>لا توجد هدايا مضافة.</p>";
-    return;
+    const list = document.getElementById("giftList");
+    if (!list) return;
+  
+    const gifts = await api("/api/gifts");
+  
+    if (gifts.length === 0) {
+      list.innerHTML = "<p>لا توجد هدايا مضافة.</p>";
+      return;
+    }
+  
+    list.innerHTML = gifts.map(gift => `
+      <div class="list-card gift-item">
+        <div>
+          <b>${gift.name}</b><br>
+          الكمية المتبقية: ${gift.qty}<br>
+          الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
+        </div>
+  
+        <button class="gift-delete-btn" onclick="deleteGift(${gift.id})">×</button>
+      </div>
+    `).join("");
   }
 
-  list.innerHTML = gifts.map(gift => `
-    <div class="list-card">
-      <b>${gift.name}</b><br>
-      الكمية: ${gift.qty}<br>
-      الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
-    </div>
-  `).join("");
-}
+  async function deleteGift(id) {
+    if (!confirm("هل تريدين حذف هذه الهدية؟")) return;
+  
+    try {
+      await api("/api/delete-gift", {
+        method: "POST",
+        body: JSON.stringify({ id })
+      });
+  
+      renderGiftAdmin();
+  
+    } catch (error) {
+      alert(error.message);
+    }
+  }
 
 async function resetGifts() {
     if (!confirm("هل أنتِ متأكدة من حذف جميع الهدايا؟")) return;

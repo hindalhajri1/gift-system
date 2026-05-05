@@ -323,3 +323,26 @@
       grid-template-columns: 1fr;
     }
   }
+  .gift-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  
+  .gift-delete-btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    border-radius: 50%;
+    background: #fef2f2;
+    color: #b42318;
+    border: 1px solid #fca5a5;
+    font-size: 22px;
+    line-height: 1;
+  }
+  
+  .gift-delete-btn:hover {
+    background: #fee2e2;
+    color: #991b1b;
+  }
