@@ -351,8 +351,12 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    opacity: 0;           /* مخفي بالبداية */
+    transition: opacity .4s ease;
   }
-  
+  .prize-content.show {
+    opacity: 1;           /* يظهر بعد الكشط */
+  }
   .gift-preview {
     display: block;
     width: 140px;

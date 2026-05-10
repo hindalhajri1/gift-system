@@ -67,8 +67,8 @@ async function start() {
     });
 
     document.getElementById("giftText").innerText = data.gift;
-    const prizeContent = document.querySelector(".prize-content");
-
+    const content = document.querySelector(".prize-content");
+    if (content) content.classList.remove("show");
 let oldImg = document.getElementById("giftImagePreview");
 if (oldImg) oldImg.remove();
 
@@ -251,21 +251,22 @@ function initScratchCanvas() {
 
     if (percent > 0.55 && !finished) {
       finished = true;
-
+    
+      // إظهار المحتوى بعد الكشط
+      const content = document.querySelector(".prize-content");
+      if (content) content.classList.add("show");
+    
       if (typeof confetti === "function") {
         confetti({
           particleCount: 40,
           spread: 50,
-          startVelocity: 20,
-          gravity: 0.7,
-          scalar: 0.8,
           colors: ["#003b71", "#60cad8", "#ffffff"]
         });
       }
-
+    
       canvas.style.transition = "opacity .4s ease";
       canvas.style.opacity = "0";
-
+    
       setTimeout(() => {
         canvas.style.display = "none";
       }, 400);
