@@ -369,3 +369,7 @@
     position: relative;
     z-index: 5;
   }
+  #scratchCanvas {
+    z-index: 20;
+    background: #003b71;
+  }
