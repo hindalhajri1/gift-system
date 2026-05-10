@@ -76,6 +76,14 @@ async function start() {
     alert(error.message);
   }
   document.getElementById("giftText").innerText = data.gift;
+  const img = document.getElementById("giftImagePreview");
+
+if (img && data.image) {
+  img.src = data.image;
+  img.style.display = "block";
+} else if (img) {
+  img.style.display = "none";
+}
 
 if (data.image) {
   const img = document.getElementById("giftImagePreview");
