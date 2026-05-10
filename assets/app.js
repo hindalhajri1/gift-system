@@ -66,18 +66,8 @@ async function start() {
     const oldImg = document.getElementById("giftImagePreview");
     if (oldImg) oldImg.remove();
 
-    if (data.image && content) {
-      const img = document.createElement("img");
-      img.id = "giftImagePreview";
-      img.src = data.image;
-      img.alt = data.gift;
-      img.style.width = "140px";
-      img.style.height = "140px";
-      img.style.objectFit = "contain";
-      img.style.marginTop = "14px";
-      img.style.display = "block";
-      content.appendChild(img);
-    }
+    window.pendingGiftImage = data.image || "";
+    window.pendingGiftName = data.gift || "";
 
     document.getElementById("form").style.display = "none";
     document.getElementById("gifts").style.display = "flex";
@@ -242,6 +232,23 @@ function initScratchCanvas() {
       finished = true;
 
       const content = document.querySelector(".prize-content");
+
+      if (content && window.pendingGiftImage) {
+        let oldImg = document.getElementById("giftImagePreview");
+        if (oldImg) oldImg.remove();
+      
+        const img = document.createElement("img");
+        img.id = "giftImagePreview";
+        img.src = window.pendingGiftImage;
+        img.alt = window.pendingGiftName || "gift";
+        img.style.width = "140px";
+        img.style.height = "140px";
+        img.style.objectFit = "contain";
+        img.style.marginTop = "14px";
+        img.style.display = "block";
+      
+        content.appendChild(img);
+      }
       if (content) content.classList.add("show");
 
       if (typeof confetti === "function") {
