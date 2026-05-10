@@ -225,9 +225,7 @@ async function resetGifts() {
   
       const percent = cleared / (imageData.data.length / 4);
   
-      if (percent > 0.55) {
-
-        // 🎉 الكونفيتي هنا
+      if (typeof confetti === "function") {
         confetti({
           particleCount: 40,
           spread: 50,
@@ -236,13 +234,6 @@ async function resetGifts() {
           scalar: 0.8,
           colors: ["#003b71", "#60cad8", "#ffffff"]
         });
-      
-        canvas.style.transition = "opacity .4s ease";
-        canvas.style.opacity = "0";
-      
-        setTimeout(() => {
-          canvas.style.display = "none";
-        }, 400);
       }
   
     canvas.addEventListener("mousedown", () => isDrawing = true);
