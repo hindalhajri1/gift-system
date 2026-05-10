@@ -31,13 +31,9 @@ function normalizeMobile(mobile) {
 }
 
 async function start() {
-  const nameInput = document.getElementById("name");
-  const mobileInput = document.getElementById("mobile");
-  const genderInput = document.getElementById("gender");
-
-  const name = String(nameInput.value || "").trim();
-  const mobile = normalizeMobile(String(mobileInput.value || "").trim());
-  const gender = String(genderInput.value || "").trim();
+  const name = String(document.getElementById("name").value || "").trim();
+  const mobile = normalizeMobile(String(document.getElementById("mobile").value || "").trim());
+  const gender = String(document.getElementById("gender").value || "").trim();
 
   if (!name || !mobile || !gender) {
     alert("اكتبي الاسم ورقم الجوال واختاري الفئة");
@@ -59,32 +55,29 @@ async function start() {
 
     const data = await api("/api/draw", {
       method: "POST",
-      body: JSON.stringify({
-        name: name,
-        mobile: mobile,
-        gender: gender
-      })
+      body: JSON.stringify({ name, mobile, gender })
     });
 
-    document.getElementById("giftText").innerText = data.gift;
     const content = document.querySelector(".prize-content");
-if (content) content.classList.remove("show");
-let oldImg = document.getElementById("giftImagePreview");
-if (oldImg) oldImg.remove();
+    if (content) content.classList.remove("show");
 
-if (data.image && prizeContent) {
-  const img = document.createElement("img");
-  img.id = "giftImagePreview";
-  img.src = data.image;
-  img.alt = data.gift;
-  img.style.width = "140px";
-  img.style.height = "140px";
-  img.style.objectFit = "contain";
-  img.style.marginTop = "14px";
-  img.style.display = "block";
+    document.getElementById("giftText").innerText = data.gift;
 
-  prizeContent.appendChild(img);
-}
+    const oldImg = document.getElementById("giftImagePreview");
+    if (oldImg) oldImg.remove();
+
+    if (data.image && content) {
+      const img = document.createElement("img");
+      img.id = "giftImagePreview";
+      img.src = data.image;
+      img.alt = data.gift;
+      img.style.width = "140px";
+      img.style.height = "140px";
+      img.style.objectFit = "contain";
+      img.style.marginTop = "14px";
+      img.style.display = "block";
+      content.appendChild(img);
+    }
 
     document.getElementById("form").style.display = "none";
     document.getElementById("gifts").style.display = "flex";
@@ -110,10 +103,12 @@ async function addGift() {
   try {
     await api("/api/gifts", {
       method: "POST",
-      body: JSON.stringify({ name, qty, gender, image })    });
+      body: JSON.stringify({ name, qty, gender, image })
+    });
 
     document.getElementById("giftName").value = "";
     document.getElementById("giftQty").value = "";
+    document.getElementById("giftImage").value = "";
 
     renderGiftAdmin();
 
@@ -135,19 +130,14 @@ async function renderGiftAdmin() {
 
   list.innerHTML = gifts.map(gift => `
     <div class="list-card gift-item">
-  
       <div style="display:flex; gap:12px; align-items:center;">
-        
         ${gift.image ? `<img src="${gift.image}" style="width:60px;height:60px;border-radius:8px;object-fit:cover;">` : ""}
-  
         <div>
           <b>${gift.name}</b><br>
           الكمية المتبقية: ${gift.qty}<br>
           الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
         </div>
-  
       </div>
-  
       <button class="gift-delete-btn" onclick="deleteGift(${gift.id})">×</button>
     </div>
   `).join("");
@@ -163,7 +153,6 @@ async function deleteGift(id) {
     });
 
     renderGiftAdmin();
-
   } catch (error) {
     alert(error.message);
   }
@@ -251,11 +240,10 @@ function initScratchCanvas() {
 
     if (percent > 0.55 && !finished) {
       finished = true;
-    
-      // إظهار المحتوى بعد الكشط
+
       const content = document.querySelector(".prize-content");
       if (content) content.classList.add("show");
-    
+
       if (typeof confetti === "function") {
         confetti({
           particleCount: 40,
@@ -263,10 +251,10 @@ function initScratchCanvas() {
           colors: ["#003b71", "#60cad8", "#ffffff"]
         });
       }
-    
+
       canvas.style.transition = "opacity .4s ease";
       canvas.style.opacity = "0";
-    
+
       setTimeout(() => {
         canvas.style.display = "none";
       }, 400);
@@ -299,4 +287,3 @@ async function loadUser() {
 function logout() {
   window.location.href = "/cdn-cgi/access/logout";
 }
-console.log(data);
