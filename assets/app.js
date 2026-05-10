@@ -75,12 +75,20 @@ async function start() {
   } catch (error) {
     alert(error.message);
   }
+  document.getElementById("giftText").innerText = data.gift;
+
+if (data.image) {
+  const img = document.getElementById("giftImagePreview");
+  img.src = data.image;
+  img.style.display = "block";
+}
 }
 
 async function addGift() {
   const name = document.getElementById("giftName").value.trim();
   const qty = document.getElementById("giftQty").value;
   const gender = document.getElementById("giftGender").value;
+  const image = document.getElementById("giftImage").value.trim();
 
   if (!name || !qty) {
     alert("اكتبي اسم الهدية والكمية");
@@ -90,8 +98,7 @@ async function addGift() {
   try {
     await api("/api/gifts", {
       method: "POST",
-      body: JSON.stringify({ name, qty, gender })
-    });
+      body: JSON.stringify({ name, qty, gender, image })    });
 
     document.getElementById("giftName").value = "";
     document.getElementById("giftQty").value = "";
@@ -116,11 +123,19 @@ async function renderGiftAdmin() {
 
   list.innerHTML = gifts.map(gift => `
     <div class="list-card gift-item">
-      <div>
-        <b>${gift.name}</b><br>
-        الكمية المتبقية: ${gift.qty}<br>
-        الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
+  
+      <div style="display:flex; gap:12px; align-items:center;">
+        
+        ${gift.image ? `<img src="${gift.image}" style="width:60px;height:60px;border-radius:8px;object-fit:cover;">` : ""}
+  
+        <div>
+          <b>${gift.name}</b><br>
+          الكمية المتبقية: ${gift.qty}<br>
+          الفئة: ${gift.gender === "all" ? "للجميع" : gift.gender === "male" ? "رجال" : "نساء"}
+        </div>
+  
       </div>
+  
       <button class="gift-delete-btn" onclick="deleteGift(${gift.id})">×</button>
     </div>
   `).join("");
