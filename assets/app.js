@@ -31,65 +31,36 @@ function normalizeMobile(mobile) {
 }
 
 async function start() {
-  const nameInput = document.getElementById("name");
-  const mobileInput = document.getElementById("mobile");
-  const genderInput = document.getElementById("gender");
 
-  const name = nameInput.value.trim();
-  const mobile = normalizeMobile(mobileInput.value.trim());
-  const gender = genderInput.value;
+  const res = await fetch("/api/draw", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      name,
+      mobile,
+      gender
+    })
+  });
 
-  if (!name || !mobile || !gender) {
-    alert("اكتبي الاسم ورقم الجوال واختاري الفئة");
+  const data = await res.json(); // ← هنا تعريف data
+
+  if (data.error) {
+    alert(data.error);
     return;
   }
 
-  if (!/^05\d{8}$/.test(mobile)) {
-    alert("رقم الجوال غير صحيح، مثال: 05xxxxxxxx");
-    return;
-  }
-
-  try {
-    const check = await api(`/api/check?mobile=${encodeURIComponent(mobile)}`);
-
-    if (check.exists) {
-      alert(`تم تسجيلك مسبقًا، هديتك هي: ${check.gift}`);
-      return;
-    }
-
-    userName = name;
-    userMobile = mobile;
-    userGender = gender;
-
-    const data = await api("/api/draw", {
-      method: "POST",
-      body: JSON.stringify({ name: userName, mobile: userMobile, gender: userGender })
-    });
-
-    document.getElementById("giftText").innerText = data.gift;
-    document.getElementById("form").style.display = "none";
-    document.getElementById("gifts").style.display = "flex";
-
-    setTimeout(initScratchCanvas, 100);
-
-  } catch (error) {
-    alert(error.message);
-  }
+  // 👇 هنا حطي كود العرض
   document.getElementById("giftText").innerText = data.gift;
+
   const img = document.getElementById("giftImagePreview");
 
-if (img && data.image) {
-  img.src = data.image;
-  img.style.display = "block";
-} else if (img) {
-  img.style.display = "none";
-}
+  if (img && data.image) {
+    img.src = data.image;
+    img.style.display = "block";
+  } else if (img) {
+    img.style.display = "none";
+  }
 
-if (data.image) {
-  const img = document.getElementById("giftImagePreview");
-  img.src = data.image;
-  img.style.display = "block";
-}
 }
 
 async function addGift() {
