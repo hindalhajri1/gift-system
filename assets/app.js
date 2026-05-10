@@ -67,7 +67,7 @@ async function start() {
     });
 
     document.getElementById("giftText").innerText = data.gift;
-
+    alert("رابط الصورة: " + data.image);
     const img = document.getElementById("giftImagePreview");
     if (img && data.image) {
       img.src = data.image;
