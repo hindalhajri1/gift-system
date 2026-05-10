@@ -36,7 +36,7 @@ async function start() {
   const gender = String(document.getElementById("gender").value || "").trim();
 
   if (!name || !mobile || !gender) {
-    alert("اكتبي الاسم ورقم الجوال واختاري الفئة");
+    alert("اكتب الاسم ورقم الجوال واختاري الفئة");
     return;
   }
 
@@ -86,7 +86,7 @@ async function addGift() {
   const image = document.getElementById("giftImage").value.trim();
 
   if (!name || !qty) {
-    alert("اكتبي اسم الهدية والكمية");
+    alert("اكتب اسم الهدية والكمية");
     return;
   }
 
@@ -134,7 +134,7 @@ async function renderGiftAdmin() {
 }
 
 async function deleteGift(id) {
-  if (!confirm("هل تريدين حذف هذه الهدية؟")) return;
+  if (!confirm("هل تريد حذف هذه الهدية؟")) return;
 
   try {
     await api("/api/delete-gift", {
@@ -149,7 +149,7 @@ async function deleteGift(id) {
 }
 
 async function resetGifts() {
-  if (!confirm("هل أنتِ متأكدة من حذف جميع الهدايا؟")) return;
+  if (!confirm("هل أنت متأكد من حذف جميع الهدايا؟")) return;
 
   try {
     await api("/api/reset-gifts", { method: "POST" });
@@ -161,7 +161,7 @@ async function resetGifts() {
 }
 
 async function resetResults() {
-  if (!confirm("هل أنتِ متأكدة من حذف جميع السحوبات؟")) return;
+  if (!confirm("هل أنت متأكد من حذف جميع السحوبات؟")) return;
 
   try {
     await api("/api/reset-results", { method: "POST" });

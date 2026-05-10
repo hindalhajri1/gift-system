@@ -15,7 +15,7 @@ export async function onRequestPost({ request, env }) {
   const image = body.image?.trim() || "";
 
   if (!name || !Number.isInteger(qty) || qty <= 0) {
-    return Response.json({ error: "اكتبي اسم الهدية والكمية بشكل صحيح" }, { status: 400 });
+    return Response.json({ error: "اكتب اسم الهدية والكمية بشكل صحيح" }, { status: 400 });
   }
 
   await env.DB.prepare(
