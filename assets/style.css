@@ -351,11 +351,13 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    opacity: 0;           /* مخفي بالبداية */
     transition: opacity .4s ease;
+    opacity: 0 !important;
+    visibility: hidden !important;
   }
   .prize-content.show {
-    opacity: 1;           /* يظهر بعد الكشط */
+    opacity: 1 !important;
+    visibility: visible !important;
   }
   .gift-preview {
     display: block;
