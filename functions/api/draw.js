@@ -2,9 +2,9 @@ export async function onRequestPost({ request, env }) {
   try {
     const body = await request.json();
 
-    const employeeName = body.name?.trim();
-    const mobile = body.mobile?.trim();
-    const gender = body.gender?.trim();
+    const employeeName = String(body.name || "").trim();
+    const mobile = String(body.mobile || "").trim();
+    const gender = String(body.gender || "").trim();
 
     if (!employeeName || !mobile || !gender) {
       return Response.json({ error: "الاسم والجوال والفئة مطلوبة" }, { status: 400 });
