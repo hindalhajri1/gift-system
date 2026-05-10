@@ -294,3 +294,4 @@ async function loadUser() {
 function logout() {
   window.location.href = "/cdn-cgi/access/logout";
 }
+console.log(data);
