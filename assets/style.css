@@ -346,10 +346,20 @@
     background: #fee2e2;
     color: #991b1b;
   }
+  .prize-content {
+    display: flex !important;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
   .gift-preview {
     display: block;
-    width: 130px;
-    height: 130px;
+    width: 140px;
+    height: 140px;
     object-fit: contain;
     margin-top: 14px;
+    border-radius: 12px;
+    position: relative;
+    z-index: 5;
   }
