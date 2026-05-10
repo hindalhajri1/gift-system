@@ -68,7 +68,7 @@ async function start() {
 
     document.getElementById("giftText").innerText = data.gift;
     const content = document.querySelector(".prize-content");
-    if (content) content.classList.remove("show");
+if (content) content.classList.remove("show");
 let oldImg = document.getElementById("giftImagePreview");
 if (oldImg) oldImg.remove();
 
