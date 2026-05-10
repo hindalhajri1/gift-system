@@ -67,15 +67,24 @@ async function start() {
     });
 
     document.getElementById("giftText").innerText = data.gift;
-    const img = document.getElementById("giftImagePreview");
+    const prizeContent = document.querySelector(".prize-content");
 
-    if (img && data.image) {
-      img.src = data.image;
-      img.removeAttribute("style");
-      img.classList.add("gift-preview");
-    } else if (img) {
-      img.style.display = "none";
-    }
+let oldImg = document.getElementById("giftImagePreview");
+if (oldImg) oldImg.remove();
+
+if (data.image && prizeContent) {
+  const img = document.createElement("img");
+  img.id = "giftImagePreview";
+  img.src = data.image;
+  img.alt = data.gift;
+  img.style.width = "140px";
+  img.style.height = "140px";
+  img.style.objectFit = "contain";
+  img.style.marginTop = "14px";
+  img.style.display = "block";
+
+  prizeContent.appendChild(img);
+}
 
     document.getElementById("form").style.display = "none";
     document.getElementById("gifts").style.display = "flex";
